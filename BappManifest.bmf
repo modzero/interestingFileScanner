@@ -1,0 +1,11 @@
+Uuid: 572e898a6b9b45c995810122f86be739
+ExtensionType: 2
+Name: Interesting Files Scanner
+RepoName:interestingFilesScanner
+ScreenVersion: 1.0.0
+SerialVersion: 1
+MinPlatformVersion: 0
+ProOnly: True
+Author: Sven Fassbender
+ShortDescription: Extends Active Scanner with scans for interesting files and directories.
+EntryPoint: interestingFilesScanner.py
