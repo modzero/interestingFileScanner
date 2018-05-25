@@ -242,7 +242,7 @@ class FileScanner(IScannerCheck):
         attack = self.fetchURL(basePair, url)
         result_string = safe_bytes_to_string(attack.getResponse())
         try:
-            if (str)((int)(result_string)) + '\n' == result_string:
+            if str(int(result_string)) + '\n' == result_string:
                 issues.append(CustomScanIssue(
                     basePair.getHttpService(),
                     helpers.analyzeRequest(attack).getUrl(),
