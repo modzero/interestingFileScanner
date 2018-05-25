@@ -12,18 +12,13 @@ Contributes to:
 @floyd_ch, @mod0, @hanno, @albinowax
 '''
 try:
-    from burp import (IBurpExtender, IScannerCheck, IScanIssue, ITab)
+    from burp import IBurpExtender, IScannerCheck, IScanIssue, ITab
 
-    from java.io import PrintWriter
-    from java.lang import RuntimeException
-    from java.net import URL
-    from javax.swing import (GroupLayout, JPanel, JCheckBox, JLabel)
+    from javax.swing import GroupLayout, JPanel, JCheckBox, JLabel
 
     import re
     import random
     import string
-    from os import path
-    from urlparse import urlparse
 except ImportError:
     print 'Failed to load dependencies. This issue may be caused by using the unstable Jython 2.7 beta.'
 
