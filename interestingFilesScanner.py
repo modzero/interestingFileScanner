@@ -170,18 +170,21 @@ class FileScanner(IScannerCheck):
         return callbacks.makeHttpRequest(basePair.getHttpService(), newReq)
 
     def doActiveScan(self, basePair, insertionPoint):
-        host = basePair.getHttpService().getHost()
         if checkbox_perHost.isSelected():
+            host = basePair.getHttpService().getProtocol() + basePair.getHttpService().getHost() + \
+                   ":" + str(basePair.getHttpService().getPort())
             if host in self.scanned_hosts:
                 return []
             self.scanned_hosts.add(host)
         else:
-            path = helpers.analyzeRequest(basePair).getUrl().getPath()
-            if path[len(path) - 1:] != '/':
-                path = path[:path.rfind('/')] + '/'
-            if path in self.scanned_paths:
+            host_path = basePair.getHttpService().getProtocol() + basePair.getHttpService().getHost() + \
+                        ":" + str(basePair.getHttpService().getPort()) + \
+                        helpers.analyzeRequest(basePair).getUrl().getPath()
+            if host_path[-1] != '/':
+                host_path = host_path[:host_path.rfind('/')] + '/'
+            if host_path in self.scanned_paths:
                 return []
-            self.scanned_paths.add(path)
+            self.scanned_paths.add(host_path)
 
         issues = []
         if checkbox_common.isSelected():
