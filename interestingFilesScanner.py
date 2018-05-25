@@ -26,19 +26,23 @@ VERSION = '1.0.1'
 helpers = None
 callbacks = None
 
+
 def safe_bytes_to_string(bytes):
     if bytes is None:
         bytes = ''
     return helpers.bytesToString(bytes)
 
+
 def random_string():
     return "".join(random.choice(string.ascii_lowercase) for i in range(12))
+
 
 def is_same_issue(existingIssue, newIssue):
     if existingIssue.getIssueName() == newIssue.getIssueName():
         return -1
     else:
         return 0
+
 
 class BurpExtender(IBurpExtender, IScannerCheck, ITab):
     def registerExtenderCallbacks(self, this_callbacks):
@@ -60,26 +64,26 @@ class BurpExtender(IBurpExtender, IScannerCheck, ITab):
         layout.setAutoCreateContainerGaps(True)
 
         layout.setHorizontalGroup(
-           layout.createSequentialGroup()
-              .addComponent(ui_label)
-              .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                   .addComponent(checkbox_common)
-                   .addComponent(checkbox_ssh)
-                   .addComponent(checkbox_key)
-                   .addComponent(checkbox_php)
-                   .addComponent(checkbox_sql))
-              .addComponent(checkbox_perHost)
+            layout.createSequentialGroup()
+                .addComponent(ui_label)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                          .addComponent(checkbox_common)
+                          .addComponent(checkbox_ssh)
+                          .addComponent(checkbox_key)
+                          .addComponent(checkbox_php)
+                          .addComponent(checkbox_sql))
+                .addComponent(checkbox_perHost)
         )
         layout.setVerticalGroup(
-        layout.createSequentialGroup()
-            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                .addComponent(ui_label)
-                .addComponent(checkbox_common)
-                .addComponent(checkbox_perHost))
-            .addComponent(checkbox_ssh)
-            .addComponent(checkbox_key)
-            .addComponent(checkbox_php)
-            .addComponent(checkbox_sql)
+            layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                          .addComponent(ui_label)
+                          .addComponent(checkbox_common)
+                          .addComponent(checkbox_perHost))
+                .addComponent(checkbox_ssh)
+                .addComponent(checkbox_key)
+                .addComponent(checkbox_php)
+                .addComponent(checkbox_sql)
         )
 
         helpers = callbacks.getHelpers()
@@ -92,7 +96,6 @@ class BurpExtender(IBurpExtender, IScannerCheck, ITab):
 
         return
 
-
     def defineCheckBox(self, caption, selected=True, enabled=True):
         checkBox = JCheckBox(caption)
         checkBox.setSelected(selected)
@@ -100,10 +103,11 @@ class BurpExtender(IBurpExtender, IScannerCheck, ITab):
         return checkBox
 
     def getTabCaption(self):
-        return("Interesting Files Scanner")
+        return "Interesting Files Scanner"
 
     def getUiComponent(self):
         return self.tab
+
 
 class FileScanner(IScannerCheck):
     scanned_hosts = set()
@@ -133,7 +137,7 @@ class FileScanner(IScannerCheck):
         if checkbox_perHost.isSelected():
             newReq = safe_bytes_to_string(basePair.getRequest()).replace(path, url, 1)
         else:
-            if path[len(path)-1:] != '/':
+            if path[len(path) - 1:] != '/':
                 newPath = path[:path.rfind('/')] + '/'
                 newReq = safe_bytes_to_string(basePair.getRequest()).replace(path, newPath[:-1] + url, 1)
             else:
@@ -148,10 +152,10 @@ class FileScanner(IScannerCheck):
             self.scanned_hosts.add(host)
         else:
             path = helpers.analyzeRequest(basePair).getUrl().getPath()
-            if path[len(path)-1:] != '/':
+            if path[len(path) - 1:] != '/':
                 path = path[:path.rfind('/')] + '/'
             if path in self.scanned_paths:
-                return[]
+                return []
             self.scanned_paths.add(path)
 
         issues = []
@@ -169,24 +173,28 @@ class FileScanner(IScannerCheck):
 
     def interestingFileScan(self, basePair):
         issues = []
-        PATTERN_MAIN = {'/lfm.php':['Lazy File Manager'], '/.idea/WebServers.xml':['WebServers'],
-        '/config/databases.yml':['class:','param'], '/config/database.yml':['adapter:','database:'],
-        '/.git/config':['[core]'], '/server-status':['Apache Status'], '/sftp-config.json':['type',
-        'ftp'], '/WS_FTP.ini':['[_config_]'], '/ws_ftp.ini':['[_config_]'], '/WS_FTP.INI':['[_config_]'],
-        '/filezilla.xml':['<FileZilla'], '/sitemanager.xml':['<FileZilla'], '/FileZilla.xml':['<FileZilla'],
-        '/winscp.ini':['[Configuration]'], '/WinSCP.ini':['[Configuration]'], '/DEADJOE':['in JOE when it aborted'], 
-        '/sites/default/private/files/backup_migrate/scheduled/test.txt':['this file should not be publicly accessible'],
-        '/app/etc/local.xml':['<config','Mage'], '/.env':['APP_ENV=']}
+        PATTERN_MAIN = {'/lfm.php': ['Lazy File Manager'], '/.idea/WebServers.xml': ['WebServers'],
+                        '/config/databases.yml': ['class:', 'param'], '/config/database.yml': ['adapter:', 'database:'],
+                        '/.git/config': ['[core]'], '/server-status': ['Apache Status'], '/sftp-config.json': ['type',
+                                                                                                               'ftp'],
+                        '/WS_FTP.ini': ['[_config_]'], '/ws_ftp.ini': ['[_config_]'], '/WS_FTP.INI': ['[_config_]'],
+                        '/filezilla.xml': ['<FileZilla'], '/sitemanager.xml': ['<FileZilla'],
+                        '/FileZilla.xml': ['<FileZilla'],
+                        '/winscp.ini': ['[Configuration]'], '/WinSCP.ini': ['[Configuration]'],
+                        '/DEADJOE': ['in JOE when it aborted'],
+                        '/sites/default/private/files/backup_migrate/scheduled/test.txt': [
+                            'this file should not be publicly accessible'],
+                        '/app/etc/local.xml': ['<config', 'Mage'], '/.env': ['APP_ENV=']}
 
         for url, expect in PATTERN_MAIN.items():
             attack = self.fetchURL(basePair, url)
             if len(expect) > 1:
-                if (expect[0] in safe_bytes_to_string(attack.getResponse()) and 
-                    expect[1] in safe_bytes_to_string(attack.getResponse())):
+                if (expect[0] in safe_bytes_to_string(attack.getResponse()) and
+                            expect[1] in safe_bytes_to_string(attack.getResponse())):
                     # Check for false positive
                     baseline = self.fetchURL(basePair, url[:-1])
-                    if (expect[0] not in safe_bytes_to_string(baseline.getResponse()) and 
-                        expect[1] not in safe_bytes_to_string(baseline.getResponse())):
+                    if (expect[0] not in safe_bytes_to_string(baseline.getResponse()) and
+                                expect[1] not in safe_bytes_to_string(baseline.getResponse())):
                         issues.append(CustomScanIssue(
                             basePair.getHttpService(),
                             helpers.analyzeRequest(attack).getUrl(),
@@ -196,7 +204,7 @@ class FileScanner(IScannerCheck):
                             "High"))
             else:
                 if expect[0] in safe_bytes_to_string(attack.getResponse()):
-                # Check for false positive
+                    # Check for false positive
                     baseline = self.fetchURL(basePair, url[:-1])
                     if expect[0] not in safe_bytes_to_string(baseline.getResponse()):
                         issues.append(CustomScanIssue(
@@ -209,16 +217,16 @@ class FileScanner(IScannerCheck):
 
         url = '/CVS/Root'
         attack = self.fetchURL(basePair, url)
-        if (len(safe_bytes_to_string(attack.getResponse()).split("\n")) == 2 
+        if (len(safe_bytes_to_string(attack.getResponse()).split("\n")) == 2
             and ':' in safe_bytes_to_string(attack.getResponse())
             and '<' not in safe_bytes_to_string(attack.getResponse())):
-                issues.append(CustomScanIssue(
-                    basePair.getHttpService(),
-                    helpers.analyzeRequest(attack).getUrl(),
-                    [attack],
-                    url + " discovered",
-                    "Sensitive directory or file likely leaked",
-                    "High"))
+            issues.append(CustomScanIssue(
+                basePair.getHttpService(),
+                helpers.analyzeRequest(attack).getUrl(),
+                [attack],
+                url + " discovered",
+                "Sensitive directory or file likely leaked",
+                "High"))
 
         url = '/wallet.dat'
         attack = self.fetchURL(basePair, url)
@@ -320,19 +328,20 @@ class FileScanner(IScannerCheck):
 
     def privateKeyFileScan(self, basePair):
         issues = []
-        PRIVATE_KEYS = ['/server.key', '/privatekey.key', '/myserver.key', '/key.pem', 'placeholder_one', 'placeholder_two']
+        PRIVATE_KEYS = ['/server.key', '/privatekey.key', '/myserver.key', '/key.pem', 'placeholder_one',
+                        'placeholder_two']
         for url in PRIVATE_KEYS:
-            if url == 'placeholder_one' :
+            if url == 'placeholder_one':
                 host_key = re.sub('^www.', '', re.sub('(.*//|/.*)', "", basePair.getHttpService().getHost())) + ".key"
                 url = '/' + host_key
-            elif url == 'placeholder_two' :
+            elif url == 'placeholder_two':
                 host_key = re.sub('^www.', '', re.sub('(.*//|/.*)', "", basePair.getHttpService().getHost())) + ".key"
                 www_key = 'www.' + host_key
                 url = '/' + www_key
             attack = self.fetchURL(basePair, url)
             for ps in ['BEGIN PRIVATE KEY', 'BEGIN RSA PRIVATE KEY', 'BEGIN DSA PRIVATE KEY', 'BEGIN EC PRIVATE KEY']:
                 if ps in safe_bytes_to_string(attack.getResponse()):
-                # Check for false positive
+                    # Check for false positive
                     baseline = self.fetchURL(basePair, url[:-1])
                     if ps not in safe_bytes_to_string(baseline.getResponse()):
                         issues.append(CustomScanIssue(
@@ -369,9 +378,9 @@ class FileScanner(IScannerCheck):
 
     def sqlFileScan(self, basePair):
         issues = []
-        SQL_FILES = ['/dump.sql', '/database.sql', '/1.sql', '/backup.sql', '/data.sql','/db_backup.sql', '/dbdump.sql', 
-        '/db.sql', '/localhost.sql','/mysql.sql', '/site.sql', '/sql.sql', '/temp.sql', '/users.sql','/translate.sql', 
-        '/mysqldump.sql']
+        SQL_FILES = ['/dump.sql', '/database.sql', '/1.sql', '/backup.sql', '/data.sql', '/db_backup.sql',
+                     '/dbdump.sql', '/db.sql', '/localhost.sql', '/mysql.sql', '/site.sql', '/sql.sql', '/temp.sql',
+                     '/users.sql', '/translate.sql', '/mysqldump.sql']
         what_404 = self.check_404(basePair)
         if not what_404['sql'] or what_404['state']:
             for url in SQL_FILES:
@@ -386,8 +395,8 @@ class FileScanner(IScannerCheck):
                         "High"))
             for ck in ['.gz', '.bz2', '.xz']:
                 attack = self.fetchURL(basePair, url + ck)
-                if any(m in safe_bytes_to_string(attack.getResponse()) for m 
-                    in [b'\x1f\x8b\x08', b'\xFD7zXZ\x00', b'BZh', b'BZ0']):
+                if any(m in safe_bytes_to_string(attack.getResponse()) for m
+                       in [b'\x1f\x8b\x08', b'\xFD7zXZ\x00', b'BZh', b'BZ0']):
                     issues.append(CustomScanIssue(
                         basePair.getHttpService(),
                         helpers.analyzeRequest(attack).getUrl(),
@@ -399,6 +408,7 @@ class FileScanner(IScannerCheck):
 
     def consolidateDuplicateIssues(self, existingIssue, newIssue):
         return is_same_issue(existingIssue, newIssue)
+
 
 class CustomScanIssue(IScanIssue):
     def __init__(self, httpService, url, httpMessages, name, detail, severity):
