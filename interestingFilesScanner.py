@@ -118,7 +118,7 @@ class BurpExtender(IBurpExtender, IScannerCheck, ITab):
         callbacks.registerScannerCheck(FileScanner())
         callbacks.addSuiteTab(self)
 
-        print 'Interesting Files Scanner by @mezdanak v' + VERSION
+        print 'Interesting Files Scanner by @mezdanak @modzero v' + VERSION
 
         return
 
@@ -337,7 +337,7 @@ class FileScanner(IScannerCheck):
                             helpers.analyzeRequest(attack).getUrl(),
                             [attack, baseline],
                             url + " discovered",
-                            "Private Server Key leaked",
+                            "Private SSH Key leaked",
                             "High"))
         return issues
 
@@ -444,16 +444,16 @@ class CustomScanIssue(IScanIssue):
         return "Firm"
 
     def getIssueBackground(self):
-        pass
+        return None
 
     def getRemediationBackground(self):
-        pass
+        return None
 
     def getIssueDetail(self):
         return self._detail
 
     def getRemediationDetail(self):
-        pass
+        return None
 
     def getHttpMessages(self):
         return self._httpMessages
