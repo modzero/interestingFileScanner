@@ -23,8 +23,7 @@ except ImportError:
     print 'Failed to load dependencies. This issue may be caused by using the unstable Jython 2.7 beta.'
 
 VERSION = '1.0.1'
-helpers = None
-callbacks = None
+helpers, callbacks, checkbox_perHost, checkbox_common, checkbox_ssh, checkbox_key, checkbox_php, checkbox_sql = None
 
 
 def safe_bytes_to_string(input_bytes):
@@ -34,7 +33,7 @@ def safe_bytes_to_string(input_bytes):
 
 
 def random_string():
-    return "".join(random.choice(string.ascii_lowercase) for i in range(12))
+    return "".join(random.choice(string.ascii_lowercase) for _ in range(12))
 
 
 def is_same_issue(existingIssue, newIssue):
@@ -119,9 +118,8 @@ class FileScanner(IScannerCheck):
     def check_404(self, basePair):
         attack = self.fetchURL(basePair, '/' + random_string() + ".htm")
         request_info = helpers.analyzeResponse(attack.getResponse())
-        what_404 = {}
-        what_404['state'] = (request_info.getStatusCode() == 200)
-        what_404['content'] = safe_bytes_to_string(attack.getResponse())
+        what_404 = {'state': (request_info.getStatusCode() == 200),
+                    'content': safe_bytes_to_string(attack.getResponse())}
         if any(m in what_404['content'] for m in ['<?php', '<?=']):
             what_404['php'] = True
         else:
