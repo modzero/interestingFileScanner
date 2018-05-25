@@ -51,12 +51,12 @@ class BurpExtender(IBurpExtender, IScannerCheck, ITab):
         callbacks = this_callbacks
 
         ui_label = JLabel('Scans to perform:')
-        checkbox_perHost = self.defineCheckBox('Perform scans only once per Domain')
-        checkbox_common = self.defineCheckBox('Interesting Files')
+        checkbox_perHost = self.defineCheckBox('Scan once per domain (web root only, not every subdirectory)')
+        checkbox_common = self.defineCheckBox('Interesting files')
         checkbox_ssh = self.defineCheckBox('SSH private keys')
         checkbox_key = self.defineCheckBox('.key files')
-        checkbox_php = self.defineCheckBox('PHP File Scans')
-        checkbox_sql = self.defineCheckBox('SQL File Scans')
+        checkbox_php = self.defineCheckBox('PHP file scans')
+        checkbox_sql = self.defineCheckBox('SQL file scans')
 
         self.tab = JPanel()
         layout = GroupLayout(self.tab)
