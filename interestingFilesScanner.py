@@ -23,6 +23,18 @@ except ImportError:
     print 'Failed to load dependencies. This issue may be caused by using the unstable Jython 2.7 beta.'
 
 VERSION = '1.0.1'
+PATTERN_MAIN = {'/lfm.php': ['Lazy File Manager'], '/.idea/WebServers.xml': ['WebServers'],
+                '/config/databases.yml': ['class:', 'param'], '/config/database.yml': ['adapter:', 'database:'],
+                '/.git/config': ['[core]'], '/server-status': ['Apache Status'], '/sftp-config.json': ['type',
+                                                                                                       'ftp'],
+                '/WS_FTP.ini': ['[_config_]'], '/ws_ftp.ini': ['[_config_]'], '/WS_FTP.INI': ['[_config_]'],
+                '/filezilla.xml': ['<FileZilla'], '/sitemanager.xml': ['<FileZilla'],
+                '/FileZilla.xml': ['<FileZilla'],
+                '/winscp.ini': ['[Configuration]'], '/WinSCP.ini': ['[Configuration]'],
+                '/DEADJOE': ['in JOE when it aborted'],
+                '/sites/default/private/files/backup_migrate/scheduled/test.txt': [
+                    'this file should not be publicly accessible'],
+                '/app/etc/local.xml': ['<config', 'Mage'], '/.env': ['APP_ENV=']}
 helpers, callbacks, checkbox_perHost, checkbox_common, checkbox_ssh, checkbox_key, checkbox_php, checkbox_sql = None
 
 
@@ -171,18 +183,6 @@ class FileScanner(IScannerCheck):
 
     def interestingFileScan(self, basePair):
         issues = []
-        PATTERN_MAIN = {'/lfm.php': ['Lazy File Manager'], '/.idea/WebServers.xml': ['WebServers'],
-                        '/config/databases.yml': ['class:', 'param'], '/config/database.yml': ['adapter:', 'database:'],
-                        '/.git/config': ['[core]'], '/server-status': ['Apache Status'], '/sftp-config.json': ['type',
-                                                                                                               'ftp'],
-                        '/WS_FTP.ini': ['[_config_]'], '/ws_ftp.ini': ['[_config_]'], '/WS_FTP.INI': ['[_config_]'],
-                        '/filezilla.xml': ['<FileZilla'], '/sitemanager.xml': ['<FileZilla'],
-                        '/FileZilla.xml': ['<FileZilla'],
-                        '/winscp.ini': ['[Configuration]'], '/WinSCP.ini': ['[Configuration]'],
-                        '/DEADJOE': ['in JOE when it aborted'],
-                        '/sites/default/private/files/backup_migrate/scheduled/test.txt': [
-                            'this file should not be publicly accessible'],
-                        '/app/etc/local.xml': ['<config', 'Mage'], '/.env': ['APP_ENV=']}
 
         for url, expect in PATTERN_MAIN.items():
             attack = self.fetchURL(basePair, url)
