@@ -43,7 +43,14 @@ SQL_FILES = ['/dump.sql', '/database.sql', '/1.sql', '/backup.sql', '/data.sql',
              '/dbdump.sql', '/db.sql', '/localhost.sql', '/mysql.sql', '/site.sql', '/sql.sql', '/temp.sql',
              '/users.sql', '/translate.sql', '/mysqldump.sql']
 
-helpers, callbacks, checkbox_perHost, checkbox_common, checkbox_ssh, checkbox_key, checkbox_php, checkbox_sql = None
+helpers = None
+callbacks = None
+checkbox_perHost = None
+checkbox_common = None
+checkbox_ssh = None
+checkbox_key = None
+checkbox_php = None
+checkbox_sql = None
 
 
 def safe_bytes_to_string(input_bytes):
