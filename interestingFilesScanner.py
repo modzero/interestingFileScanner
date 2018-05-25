@@ -27,10 +27,10 @@ helpers = None
 callbacks = None
 
 
-def safe_bytes_to_string(bytes):
-    if bytes is None:
-        bytes = ''
-    return helpers.bytesToString(bytes)
+def safe_bytes_to_string(input_bytes):
+    if input_bytes is None:
+        input_bytes = ''
+    return helpers.bytesToString(input_bytes)
 
 
 def random_string():
