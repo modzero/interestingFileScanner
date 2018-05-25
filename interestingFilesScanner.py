@@ -35,6 +35,14 @@ PATTERN_MAIN = {'/lfm.php': ['Lazy File Manager'], '/.idea/WebServers.xml': ['We
                 '/sites/default/private/files/backup_migrate/scheduled/test.txt': [
                     'this file should not be publicly accessible'],
                 '/app/etc/local.xml': ['<config', 'Mage'], '/.env': ['APP_ENV=']}
+SSH_KEYS = ['/id_rsa', '/id_dsa', '/.ssh/id_rsa', '/.ssh/id_dsa']
+PRIVATE_KEYS = ['/server.key', '/privatekey.key', '/myserver.key', '/key.pem', 'placeholder_one',
+                'placeholder_two']
+PHP_FILES = ['index.php', 'wp-config.php', 'configuration.php', 'config.php', 'config.inc.php', 'settings.php']
+SQL_FILES = ['/dump.sql', '/database.sql', '/1.sql', '/backup.sql', '/data.sql', '/db_backup.sql',
+             '/dbdump.sql', '/db.sql', '/localhost.sql', '/mysql.sql', '/site.sql', '/sql.sql', '/temp.sql',
+             '/users.sql', '/translate.sql', '/mysqldump.sql']
+
 helpers, callbacks, checkbox_perHost, checkbox_common, checkbox_ssh, checkbox_key, checkbox_php, checkbox_sql = None
 
 
@@ -307,7 +315,6 @@ class FileScanner(IScannerCheck):
 
     def sshKeyFileScan(self, basePair):
         issues = []
-        SSH_KEYS = ['/id_rsa', '/id_dsa', '/.ssh/id_rsa', '/.ssh/id_dsa']
         for url in SSH_KEYS:
             attack = self.fetchURL(basePair, url)
             for ps in ['BEGIN PRIVATE KEY', 'BEGIN RSA PRIVATE KEY', 'BEGIN DSA PRIVATE KEY']:
@@ -326,8 +333,6 @@ class FileScanner(IScannerCheck):
 
     def privateKeyFileScan(self, basePair):
         issues = []
-        PRIVATE_KEYS = ['/server.key', '/privatekey.key', '/myserver.key', '/key.pem', 'placeholder_one',
-                        'placeholder_two']
         for url in PRIVATE_KEYS:
             if url == 'placeholder_one':
                 host_key = re.sub('^www.', '', re.sub('(.*//|/.*)', "", basePair.getHttpService().getHost())) + ".key"
@@ -353,7 +358,6 @@ class FileScanner(IScannerCheck):
 
     def phpFileScan(self, basePair):
         issues = []
-        PHP_FILES = ['index.php', 'wp-config.php', 'configuration.php', 'config.php', 'config.inc.php', 'settings.php']
         what_404 = self.check_404(basePair)
         if not what_404:
             pass
@@ -376,9 +380,6 @@ class FileScanner(IScannerCheck):
 
     def sqlFileScan(self, basePair):
         issues = []
-        SQL_FILES = ['/dump.sql', '/database.sql', '/1.sql', '/backup.sql', '/data.sql', '/db_backup.sql',
-                     '/dbdump.sql', '/db.sql', '/localhost.sql', '/mysql.sql', '/site.sql', '/sql.sql', '/temp.sql',
-                     '/users.sql', '/translate.sql', '/mysqldump.sql']
         what_404 = self.check_404(basePair)
         if not what_404['sql'] or what_404['state']:
             for url in SQL_FILES:
