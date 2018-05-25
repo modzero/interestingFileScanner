@@ -1,6 +1,6 @@
 # Interesting Files Scanner
 ## About
-Interesting Files Scanner extends Burp Suite's active scanner, with scans for interesting files and directories.
+<b>Interesting Files Scanner</b> extends Burp Suite's active scanner, with scans for interesting files and directories.
 A main feature of the extension is the check for false positives with tested patterns for each case. Furthermore,
 a Burp Suite tab is present to select/unselect the checks, to avoid network overload. 
 
@@ -11,6 +11,16 @@ For example the following file checks are implemented:
 * Various .key files
 * Common PHP files and the corresponding backup files
 * SQL database files
+
+## Configuration
+You can configure the check <b>Interesting Files Scanner</b> will perform, simply select the new tab in Burp
+Suite and select the file checks that may apply to your scenario.
+
+<img src="images/configuration_tab.png" width="100%" height="100%">
+
+Furthermore, you can specify if you want <b>Interesting Files Scanner</b> to scan all subdirectories discovered
+on the target domain. Therefore, unselect the checkbox <i>'Scan once per domain'</i>, which is selected by 
+default.
 
 ## Requirements
 This extension requires Burp Suite Professional and Jython 2.5 or later standalone. (http://www.jython.org)
