@@ -441,7 +441,7 @@ class CustomScanIssue(IScanIssue):
         return self._severity
 
     def getConfidence(self):
-        return "Certain"
+        return "Firm"
 
     def getIssueBackground(self):
         pass
