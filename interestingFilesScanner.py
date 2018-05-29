@@ -155,7 +155,9 @@ class BurpExtender(IBurpExtender, IScannerCheck, ITab):
         callbacks.registerScannerCheck(FileScanner())
         callbacks.addSuiteTab(self)
 
-        print 'Interesting Files Scanner by Sven Fassbender @mezdanak @modzero v' + VERSION
+        print 'Interesting Files Scanner'
+        print 'Created by Sven Fassbender (@mezdanak, @modzero) v' + VERSION
+        print 'https://github.com/modzero/interestingFileScanner'
 
         return
 
