@@ -12,6 +12,14 @@ For example the following file checks are implemented:
 * Common PHP files and the corresponding backup files
 * SQL database files
 
+## Installation
+1.	Download Burp Suite Pro: http://portswigger.net/burp/download.html
+2.	Download Jython standalone JAR: http://www.jython.org/downloads.html
+3.	Burp Suite -> Extender -> Options -> Python Environment -> Select File -> Choose the Jython standalone JAR
+4.  Clone the GitHub repository: git clone https://github.com/modzero/interestingFileScanner.git
+5.  Burp Suite -> Extender -> Add -> Extension type: Python -> Extension file: "downloaded interestingFileScanner.py" -> Next
+6.  Go to "Interesting Files Scanner" tab in Burp Suite and configure the extension for your needs
+
 ## Configuration
 You can configure the scans <b>Interesting Files Scanner</b> will perform, select the <i>Interesting File Scanner</i>
 tab in Burp Suite and select the file checks that may apply to your scenario. Per default all checks are selected.
