@@ -226,16 +226,23 @@ class FileScanner(IScannerCheck):
             self.scanned_paths.add(host_path)
 
         issues = []
+        print "Info: Start scan of %s" %basePair.getHttpService().getHost()
         if checkbox_common.isSelected():
+            print "Info: Running 'Interesting Files'"
             issues.extend(self.interestingFileScan(basePair))
         if checkbox_ssh.isSelected():
+            print "Info: Running 'SSH private keys'"
             issues.extend(self.sshKeyFileScan(basePair))
         if checkbox_key.isSelected():
+            print "Info: Running '.key files'"
             issues.extend(self.privateKeyFileScan(basePair))
         if checkbox_php.isSelected():
+            print "Info: Running 'PHP file scans'"
             issues.extend(self.phpFileScan(basePair))
         if checkbox_sql.isSelected():
+            print "Info: Running 'SQL file scans'"
             issues.extend(self.phpFileScan(basePair))
+        print "Info: Finished scan"
         return issues
 
     def interestingFileScan(self, basePair):
